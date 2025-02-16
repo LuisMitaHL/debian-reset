@@ -19,8 +19,8 @@ if [[ "$1" == "--update" ]]; then
   fi
   mv "$0.new" "$0"
   chmod +x "$0"
-  echo "Script actualizado. Reiniciando..."
-  exec "$0" "${@:2}"
+  echo "Script actualizado."
+  exit 0
 fi
 
 # TODO: revisar si se pudo elevar
