@@ -67,7 +67,7 @@ apt-get purge -y mariadb-server mariadb-client
 
 echo "Reseteando Bind DNS..."
 systemctl stop bind9 || true
-rm -rf /etc/bind
+rm -rf /etc/bind /var/cache/bind || true
 apt-get purge -y bind9
 apt-get install -y bind9
 
