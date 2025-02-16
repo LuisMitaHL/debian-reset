@@ -72,7 +72,7 @@ apt-get purge -y bind9
 apt-get install -y bind9
 
 echo "Reseteando configuración de red..."
-rm -f /etc/network/interfaces*
+rm -Rf /etc/network/interfaces* || true
 systemctl disable networking || true
 systemctl stop networking || true
 systemctl enable NetworkManager
