@@ -58,7 +58,7 @@ apt-get purge -y nginx*
 apt-get install -y nginx
 
 # BUG: nginx no puede escuchar en tcp/80 ya que Apache está presente
-sed -i 's/listen 80;/listen 81;/g' /etc/nginx/sites-available/default
+sed -i 's/80 def/81 def/g' /etc/nginx/sites-available/default
 
 echo "Reseteando MariaDB..."
 systemctl stop mariadb || true
