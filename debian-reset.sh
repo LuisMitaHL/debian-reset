@@ -60,9 +60,8 @@ sed -i 's/listen 80;/listen 81;/g' /etc/nginx/sites-available/default
 
 echo "Reseteando MariaDB..."
 systemctl stop mariadb || true
-rm -rf /etc/mysql
+rm -rf /etc/mysql || true
 apt-get purge -y mariadb-server mariadb-client
-apt-get install -y mariadb-server mariadb-client
 
 echo "Reseteando Bind DNS..."
 systemctl stop bind9 || true
@@ -90,3 +89,6 @@ systemctl restart bind9 || true
 
 echo "Reset completado. Si la red no funciona, se recomienda reiniciar."
 echo "En otro caso, puede usar el sistema con normalidad."
+
+echo "Presione Enter para salir..."
+read -r
