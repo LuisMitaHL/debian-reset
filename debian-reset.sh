@@ -8,11 +8,12 @@ echo
 echo "Docs: https://github.com/LuisMitaHL/debian-reset"
 echo
 
+
 # Actualizador
 if [[ "$1" == "--update" ]]; then
   GITHUB_URL="https://raw.githubusercontent.com/LuisMitaHL/debian-reset/main/debian-reset.sh"
   echo "Actualizando script..."
-  curl -L -o "$0.new" "$GITHUB_URL"
+  curl -L -o "$0.new" "$GITHUB_URL" 
   if [ $? -ne 0 ]; then
     echo "Error al descargar la actualización."
     exit 1
@@ -25,7 +26,8 @@ fi
 
 # TODO: revisar si se pudo elevar
 if [[ $EUID -ne 0 ]]; then
-  echo "No tenemos permisos de superusuario. Intentando elevar..."
+  echo "No tenemos permisos de superusuario. Intentando elevar..." >> $HOME/debian-reset.log
+  echo "Revisa los logs en $HOME/debian-reset.log"
   exec sudo bash "$0" "$@"
   exit 0
 fi
