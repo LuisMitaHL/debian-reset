@@ -51,8 +51,10 @@ apt-get install -y apache2 libapache2-mod-php
 
 echo "Reseteando Nginx..."
 systemctl stop nginx || true
-rm -rf /etc/nginx
-apt-get purge -y nginx
+rm -rf /etc/nginx || true
+# nginx no quiere detenerse
+cp -f /bin/true /usr/sbin/nginx
+apt-get purge -y nginx*
 apt-get install -y nginx
 
 # BUG: nginx no puede escuchar en tcp/80 ya que Apache está presente
