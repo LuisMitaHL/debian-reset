@@ -13,7 +13,7 @@ echo
 if [[ "$1" == "--update" ]]; then
   GITHUB_URL="https://raw.githubusercontent.com/LuisMitaHL/debian-reset/main/debian-reset.sh"
   echo "Actualizando script..."
-  curl -L -o "$0.new" "$GITHUB_URL" 
+  curl -L -o "$0.new" "$GITHUB_URL"
   if [ $? -ne 0 ]; then
     echo "Error al descargar la actualización."
     exit 1
@@ -26,8 +26,7 @@ fi
 
 # TODO: revisar si se pudo elevar
 if [[ $EUID -ne 0 ]]; then
-  echo "No tenemos permisos de superusuario. Intentando elevar..." >> $HOME/debian-reset.log
-  echo "Revisa los logs en $HOME/debian-reset.log"
+  echo "No tenemos permisos de superusuario. Intentando elevar..."
   exec sudo bash "$0" "$@"
   exit 0
 fi
@@ -53,14 +52,19 @@ apt-get install -y apache2 libapache2-mod-php
 
 echo "Reseteando Nginx..."
 systemctl stop nginx || true
+sudo systemctl disable nginx || true
 rm -rf /etc/nginx || true
+sudo rm -rf /var/log/nginx || true
 # nginx no quiere detenerse
 cp -f /bin/true /usr/sbin/nginx
 apt-get purge -y nginx*
+sudo apt-get autoremove #remove any unused dependencies
+sudo apt-get autoclean #clean up residual configuration files
 apt-get install -y nginx
 
 # BUG: nginx no puede escuchar en tcp/80 ya que Apache está presente
 sed -i 's/80 def/81 def/g' /etc/nginx/sites-available/default
+echo "NGINX esta corriendo en el puerto 81"
 
 echo "Reseteando MariaDB..."
 systemctl stop mariadb || true
