@@ -8,7 +8,6 @@ echo
 echo "Docs: https://github.com/LuisMitaHL/debian-reset"
 echo
 
-
 # Actualizador
 if [[ "$1" == "--update" ]]; then
   GITHUB_URL="https://raw.githubusercontent.com/LuisMitaHL/debian-reset/main/debian-reset.sh"
