@@ -65,11 +65,6 @@ apt-get install -y nginx
 sed -i 's/80 def/81 def/g' /etc/nginx/sites-available/default
 echo "NGINX esta corriendo en el puerto 81"
 
-echo "Reseteando MariaDB..."
-systemctl stop mariadb || true
-rm -rf /etc/mysql || true
-apt-get purge -y mariadb-server mariadb-client
-
 echo "Reseteando Bind DNS..."
 systemctl stop bind9 || true
 rm -rf /etc/bind /var/cache/bind || true
