@@ -1,0 +1,84 @@
+---
+- hosts: WebServer
+  tasks:
+    - name: "Uninstall NginX"
+      apt:
+        name: nginx
+        state: absent
+
+    - name: "Stop Nginx Services"
+      service:
+        name: nginx
+        state: stopped
+    - name: install nginx
+      apt: name=nginx state=latest
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+          
+   -  name: "1. Uninstall Apache"
+      tags: uninstall_apache
+      apt:
+        name: apache2
+        autoremove: yes
+        state: absent
+
+    - name: "Stop Apache Services"
+      service:
+        name: apache2
+        state: stopped
+
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Start Apache service
+      service:
+        name: apache2
+        state: started
+
+
+    - name: "Stop Bind9"
+      service:
+        name: bind9 
+        state: stopped
+        
+    - name: "Uninstall Bind"
+      apt:
+        name: bind9
+        state: absent
+        
+    - name: "install Bind"
+      apt:
+        name: bind9
+      
+    - name: "Start Bind9"
+      service:
+        name: bind9
+        
+
+    - name: Restart network
+        service:
+          name: network
+          state: restarted
+
+    - name: Restart resolv.conf
+      shell:
+        cmd: |
+          cat > /etc/resolv.conf <<EOF
+          nameserver 1.1.1.1
+          nameserver 1.0.0.1
+          EOF
+          echo "Resolv conf was edited"
+      args:
+        executable: /bin/bash
+# resources:
+# https://github.com/ansible/ansible/issues/39137
+# https://github.com/ankyit/ansible-demo/blob/master/uninstall-nginx.yml
+# https://stackoverflow.com/questions/39994218/ansible-to-restart-network-service
