@@ -1,0 +1,36 @@
+---
+- name: Reset Bind9
+  hosts: classcomputers
+  become: yes
+  tasks:
+    - name: Stop Bind9 service
+      systemd:
+        name: nginx
+        state: stopped
+      ignore_errors: yes
+
+    - name: Remove Bind configuration
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/bind
+        - /var/cache/bind
+      ignore_errors: yes
+
+    - name: Purge Bind9 packages
+      apt:
+        name: bind9
+        state: absent
+        purge: yes
+
+    - name: Install Bind9
+      apt:
+        name: bind9
+        state: present
+
+    - name: Restart service Bind9
+      systemd:
+        state: restarted
+        daemon_reload: true
+        name: bind9

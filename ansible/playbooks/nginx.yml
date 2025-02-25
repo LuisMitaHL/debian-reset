@@ -1,0 +1,42 @@
+---
+- name: Reset Nginx
+  hosts: classcomputers
+  become: yes
+  tasks:
+    - name: Stop Nginx service
+      systemd:
+        name: nginx
+        state: stopped
+      ignore_errors: yes
+
+    - name: Remove Nginx configuration
+      file:
+        path: /etc/nginx
+        state: absent
+      ignore_errors: yes
+
+    - name: Copy true to nginx binary
+      copy:
+        src: /bin/true
+        dest: /usr/sbin/nginx
+        force: yes
+
+    - name: Purge Nginx packages
+      apt:
+        name: nginx*
+        state: absent
+        purge: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Update Nginx default site configuration
+      shell: sed -i 's/80 def/81 def/g' /etc/nginx/sites-available/default
+
+    - name: Restart service nginx
+      systemd:
+        state: restarted
+        daemon_reload: true
+        name: nginx

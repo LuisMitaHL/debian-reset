@@ -1,0 +1,41 @@
+---
+- name: Reset Apache2 and PHP
+  hosts: classcomputers
+  become: yes
+  tasks:
+    - name: Stop Apache2 service
+      service:
+        name: apache2
+        state: stopped
+      ignore_errors: yes 
+
+    - name: Remove Apache2 and PHP configuration
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/apache2
+        - /etc/php
+      ignore_errors: yes
+
+    - name: Purge Apache2 and PHP packages
+      apt:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - apache2
+        - libapache2-mod-php*
+        - php*
+
+    - name: Install Apache2 and PHP
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2
+        - libapache2-mod-php
+    - name: Restart service apache
+      systemd:
+        state: restarted
+        daemon_reload: true
+        name: nginx

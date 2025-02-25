@@ -1,0 +1,15 @@
+---
+- name: Run multiple playbooks sequentially
+  hosts: classcomputers
+  tasks:
+    - name: Run Apache playbook
+      include_tasks: apache.yml
+
+    - name: Run Nginx playbook
+      include_tasks: nginx.yml
+
+    - name: Run Bind9 playbook
+      include_tasks: bind9.yml
+
+    - name: Run Network playbook
+      include_tasks: network.yml
